@@ -3,32 +3,30 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using MyCodeCamp.Models;
 
 
 namespace MyCodeCamp.Services
 {
-    public class TokenService : ITokenService
+    public class RsaTokenService : ITokenService
     {
         private readonly ITokenSettings _tokenSettings;
 
-        public TokenService(ITokenSettings tokenSettings)
+        public RsaTokenService(ITokenSettings tokenSettings)
         {
             _tokenSettings = tokenSettings;
         }
 
-        public string GenerateToken(IEnumerable<Claim> claims, DateTime utcExpiration, object secretKey = null )
+        public string GenerateToken(IEnumerable<Claim> claims, DateTime utcExpiration, object privateKey = null)
         {
-            if (secretKey == null) secretKey = _tokenSettings.SecretKey;
+            if (privateKey == null) privateKey = _tokenSettings.PrivateKey;
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes((string)secretKey));
-            var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+            var securityKey = new RsaSecurityKey((RSA)privateKey);
+            var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256);
 
             return GenerateToken(claims, utcExpiration, signingCredentials);
         }
-
 
         private string GenerateToken(IEnumerable<Claim> claims, DateTime utcExpiration, SigningCredentials signingCredentials)
         {
@@ -62,8 +60,8 @@ namespace MyCodeCamp.Services
         public ClaimsPrincipal GetPrincipalFromToken(string token)
         {
 
-            var issuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenSettings.SecretKey));
-           
+            var issuerSigningKey = new RsaSecurityKey(_tokenSettings.PublicKey);
+
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateAudience = false, //you might want to validate the audience and issuer depending on your use case
@@ -77,7 +75,7 @@ namespace MyCodeCamp.Services
             SecurityToken securityToken;
             ClaimsPrincipal principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
             var jwtSecurityToken = securityToken as JwtSecurityToken;
-            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.RsaSha256, StringComparison.InvariantCultureIgnoreCase))
                 throw new SecurityTokenException("Invalid token");
 
             return principal;

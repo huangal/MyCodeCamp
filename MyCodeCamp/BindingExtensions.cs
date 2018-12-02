@@ -6,7 +6,6 @@ using MyCodeCamp.Services;
 using MyCodeCamp.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MyCodeCamp
@@ -59,7 +58,9 @@ namespace MyCodeCamp
             });
 
            
-            services.AddTransient<ITokenService, TokenService>();
+            //services.AddTransient<ITokenService, TokenService>();
+            services.AddTransient<ITokenService, RsaTokenService>();
+            services.AddTransient<IAuthService, AuthService>();
 
 
 
@@ -71,9 +72,7 @@ namespace MyCodeCamp
             //});
            // services.AddSingleton<WeblogConfiguration>((config) => configuration.Bind("Weblog",   config = new WeblogConfiguration()));
 
-
-            //
-
+            services.AddTransient<IUserService, UserService>();
             services.AddTransient<ITopicAreaService, TopicAreaService>();
 
             //services.AddTransient<ITopicAreaService>(s => new TopicAreaService(5));
@@ -86,17 +85,13 @@ namespace MyCodeCamp
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddTransient<ISamlEnrollmentService, SamlService>();
-
-            services.AddTransient<IUserService, UserService>();
-
-
+           
             // services.AddSingleton<IDeliveryClient, DeliveryClient>();
-
-
 
             // Add all other services here.
             return services;
         }
+
 
         public static void AddTokenAuthentication(this IServiceCollection services)
         {
@@ -107,32 +102,49 @@ namespace MyCodeCamp
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
             {
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSttings.SecretKey)),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateLifetime = true
-                };
-
-                options.Events = new JwtBearerEvents
-                {
-                    OnAuthenticationFailed = context =>
-                    {
-                        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
-                        {
-                            context.Response.Headers.Add("Token-Expired", "true");
-                        }
-                        return Task.CompletedTask;
-                    }
-                };
+                SetJwtBeareOptions(options, tokenSttings);
             });
         }
 
-    }
+        private static void SetJwtBeareOptions(JwtBearerOptions options, ITokenSettings tokenSttings)
+        {
+            ValidateToken(options, tokenSttings);
+            OnTokenExpireEvents(options);
+        }
+
+        private static void ValidateToken(JwtBearerOptions options, ITokenSettings tokenSttings)
+        {
+           // var issuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSttings.SecretKey));
+
+            var issuerSigningKey = new RsaSecurityKey(tokenSttings.PublicKey);
+
+            options.RequireHttpsMetadata = false;
+            options.SaveToken = true;
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = issuerSigningKey,
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true
+            };
+        }
+
+        private static void OnTokenExpireEvents(JwtBearerOptions options)
+        {
+            options.Events = new JwtBearerEvents
+            {
+                OnAuthenticationFailed = context =>
+                {
+                    if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                    {
+                        context.Response.Headers.Add("Token-Expired", "true");
+                    }
+                    return Task.CompletedTask;
+                }
+            };
+        }
+   }
 
 
     //public static Boolean VerifyXml(XmlDocument Doc, RSA Key)

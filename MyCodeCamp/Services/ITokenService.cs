@@ -8,7 +8,7 @@ namespace MyCodeCamp.Services
     public interface ITokenService
     {
         string GenerateRefreshToken();
-        string GenerateToken(IEnumerable<Claim> claims, DateTime utcExpiration, string secretKey = null);
+        string GenerateToken(IEnumerable<Claim> claims, DateTime utcExpiration,object secretKey = null);
         ClaimsPrincipal GetPrincipalFromToken(string token);
         bool HasTokenExpired(string token);
         JwtSecurityToken LoadToken(string token);
