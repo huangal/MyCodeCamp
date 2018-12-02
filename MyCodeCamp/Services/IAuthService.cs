@@ -1,5 +1,4 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Mvc;
 using MyCodeCamp.Models;
 
@@ -10,7 +9,7 @@ namespace MyCodeCamp.Services
         User Authenticate(string username, string password);
         bool HasTokenExpired(string token);
         JwtSecurityToken LoadToken(string token);
-        ObjectResult Refresh(string token, string refreshToken);
+        SessionToken Refresh(SessionToken token);
     }
 
 

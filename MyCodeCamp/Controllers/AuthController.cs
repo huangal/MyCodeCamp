@@ -47,12 +47,12 @@ namespace MyCodeCamp.Controllers
             return Ok(securityToken);
         }
 
+
         [AllowAnonymous]
         [HttpPost("Token/Refresh")]
-        public IActionResult Refresh([FromBody]string token, string refreshToken)
+        public IActionResult Refresh([FromBody] SessionToken sessionToken )
         {
-            var secureToken = _authService.Refresh(token, refreshToken);
-
+            var secureToken = _authService.Refresh(sessionToken);
             return Ok(secureToken);
         }
     }

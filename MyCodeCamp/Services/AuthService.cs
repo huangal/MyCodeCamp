@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MyCodeCamp.Models;
 
@@ -58,24 +57,20 @@ namespace MyCodeCamp.Services
             return _tokenService.LoadToken(token);
         }
 
-        public ObjectResult Refresh(string token, string refreshToken)
+        public SessionToken Refresh(SessionToken sessionToken)
         {
-            var principal = _tokenService.GetPrincipalFromToken(token);
+            var principal = _tokenService.GetPrincipalFromToken(sessionToken.Token);
             var username = principal.Identity.Name;
             var savedRefreshToken = GetRefreshToken(username); //retrieve the refresh token from a data store
-            if (savedRefreshToken != refreshToken)
+            if (savedRefreshToken != sessionToken.RefreshToken)
                 throw new SecurityTokenException("Invalid refresh token");
 
             var newJwtToken = _tokenService.GenerateToken(principal.Claims, DateTime.UtcNow.AddMinutes(2));
             var newRefreshToken = _tokenService.GenerateRefreshToken();
-            DeleteRefreshToken(username, refreshToken);
+            DeleteRefreshToken(username, sessionToken.RefreshToken);
             SaveRefreshToken(username, newRefreshToken);
 
-            return new ObjectResult(new
-            {
-                token = newJwtToken,
-                refreshToken = newRefreshToken
-            });
+            return new SessionToken { Token = newJwtToken, RefreshToken = newRefreshToken };
         }
 
         private void DeleteRefreshToken(string username, string refreshToken)
