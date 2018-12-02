@@ -61,7 +61,6 @@ namespace MyCodeCamp.Services
 
         public ClaimsPrincipal GetPrincipalFromToken(string token)
         {
-
             var issuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenSettings.SecretKey));
            
             var tokenValidationParameters = new TokenValidationParameters
@@ -87,10 +86,7 @@ namespace MyCodeCamp.Services
         public bool HasTokenExpired(string token)
         {
             var securityToken = LoadToken(token);
-            var expired = securityToken.ValidTo;
-            var principal = GetPrincipalFromToken(token);
-
-            return DateTime.UtcNow > expired;
+            return DateTime.UtcNow > securityToken.ValidTo;
         }
 
         public JwtSecurityToken LoadToken(string token)

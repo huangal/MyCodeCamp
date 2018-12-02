@@ -116,7 +116,7 @@ namespace MyCodeCamp
         {
            // var issuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSttings.SecretKey));
 
-            var issuerSigningKey = new RsaSecurityKey(tokenSttings.PublicKey);
+            var issuerSigningKey = new RsaSecurityKey(tokenSttings.RsaPublicKey);
 
             options.RequireHttpsMetadata = false;
             options.SaveToken = true;

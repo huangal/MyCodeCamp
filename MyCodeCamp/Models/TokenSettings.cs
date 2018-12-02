@@ -9,14 +9,14 @@ namespace MyCodeCamp.Models
         public string Issuer { get; set; }
         public string Audience { get; set; }
         public string CertificateName { get; set; }
+
         public string SecretKey => GetSecretKey();
-        public RSA PrivateKey => GetCertificatePrivateKey();
-        public RSA PublicKey => GetCertificatePublicKey();
+        public RSA RsaPrivateKey => GetCertificatePrivateKey();
+        public RSA RsaPublicKey => GetCertificatePublicKey();
                 
         private readonly ICertificateService _certificateService;
         private X509Certificate2 _certificate;
 
-    
         public TokenSettings(ICertificateService certificateService)
         {
             _certificateService = certificateService;
@@ -26,7 +26,6 @@ namespace MyCodeCamp.Models
         {
             if (_certificate == null)
                 _certificate = _certificateService.GetCertificate(CertificateName);
-
             return _certificate?.GetPublicKeyString();
         }
 
@@ -34,14 +33,12 @@ namespace MyCodeCamp.Models
         {
             if (_certificate == null)
                 _certificate = _certificateService.GetCertificate(CertificateName);
-
             return (_certificate != null && _certificate.HasPrivateKey) ? _certificate.GetRSAPrivateKey() : null;
         }
         private RSA GetCertificatePublicKey()
         {
             if (_certificate == null)
                 _certificate = _certificateService.GetCertificate(CertificateName);
-
             return _certificate != null ? _certificate.GetRSAPublicKey() : null;
         }
 

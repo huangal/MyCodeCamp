@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -11,20 +9,21 @@ namespace MyCodeCamp.Services
 {
     public class AuthService: IAuthService
     {
-        private readonly ITokenSettings _tokenSettings;
         private readonly ITokenService _tokenService;
+        private readonly IUserService _userService;
 
-        public AuthService(ITokenSettings tokenSettings, ITokenService tokenService)
+        public AuthService( ITokenService tokenService, IUserService userService)
         {
-            _tokenSettings = tokenSettings;
             _tokenService = tokenService;
+            _userService = userService;
         }
         public User Authenticate(string username, string password)
         {
-            var user = _users.SingleOrDefault(x => x.Username == username && x.Password == password);
+            var user = _userService.GetUser(username, password);
 
             // return null if user not found
             if (user == null) return null;
+            //context.Result = new UnauthorizedResult();
             // remove password before returning
             user.Password = null;
 
@@ -95,13 +94,6 @@ namespace MyCodeCamp.Services
             //throw new NotImplementedException();
             return "abcde";
         }
-
-        // users hardcoded for simplicity, store in a db with hashed passwords in production applications
-        private List<User> _users = new List<User>
-        {
-            new User { Id = 1, FirstName = "Henry", LastName = "Huangal", Username = "test", Password = "test" }
-        };
-
     }
 
 

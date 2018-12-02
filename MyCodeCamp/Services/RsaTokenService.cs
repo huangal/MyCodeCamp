@@ -20,7 +20,7 @@ namespace MyCodeCamp.Services
 
         public string GenerateToken(IEnumerable<Claim> claims, DateTime utcExpiration, object privateKey = null)
         {
-            if (privateKey == null) privateKey = _tokenSettings.PrivateKey;
+            if (privateKey == null) privateKey = _tokenSettings.RsaPrivateKey;
 
             var securityKey = new RsaSecurityKey((RSA)privateKey);
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256);
@@ -31,7 +31,6 @@ namespace MyCodeCamp.Services
         private string GenerateToken(IEnumerable<Claim> claims, DateTime utcExpiration, SigningCredentials signingCredentials)
         {
             var claimsIdentity = new ClaimsIdentity(claims);
-
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Issuer = _tokenSettings.Issuer,
@@ -60,7 +59,7 @@ namespace MyCodeCamp.Services
         public ClaimsPrincipal GetPrincipalFromToken(string token)
         {
 
-            var issuerSigningKey = new RsaSecurityKey(_tokenSettings.PublicKey);
+            var issuerSigningKey = new RsaSecurityKey(_tokenSettings.RsaPublicKey);
 
             var tokenValidationParameters = new TokenValidationParameters
             {
@@ -85,10 +84,7 @@ namespace MyCodeCamp.Services
         public bool HasTokenExpired(string token)
         {
             var securityToken = LoadToken(token);
-            var expired = securityToken.ValidTo;
-            var principal = GetPrincipalFromToken(token);
-
-            return DateTime.UtcNow > expired;
+            return DateTime.UtcNow > securityToken.ValidTo;
         }
 
         public JwtSecurityToken LoadToken(string token)

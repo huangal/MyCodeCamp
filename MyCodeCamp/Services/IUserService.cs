@@ -7,6 +7,7 @@ namespace MyCodeCamp.Services
     {
        
         IEnumerable<User> GetUsers();
+        User GetUser(string username, string password);
 
     }
 }
