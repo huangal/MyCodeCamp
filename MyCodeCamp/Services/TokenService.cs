@@ -13,10 +13,12 @@ namespace MyCodeCamp.Services
     public class TokenService : ITokenService
     {
         private readonly ITokenSettings _tokenSettings;
+        private readonly string _securityAlgorithm;
 
         public TokenService(ITokenSettings tokenSettings)
         {
             _tokenSettings = tokenSettings;
+            _securityAlgorithm = SecurityAlgorithms.HmacSha256Signature;
         }
 
         public string GenerateToken(IEnumerable<Claim> claims, DateTime utcExpiration, object secretKey = null )
@@ -24,7 +26,7 @@ namespace MyCodeCamp.Services
             if (secretKey == null) secretKey = _tokenSettings.SecretKey;
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes((string)secretKey));
-            var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+            var signingCredentials = new SigningCredentials(securityKey, _securityAlgorithm);
 
             return GenerateToken(claims, utcExpiration, signingCredentials);
         }
@@ -75,8 +77,7 @@ namespace MyCodeCamp.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             SecurityToken securityToken;
             ClaimsPrincipal principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
-            var jwtSecurityToken = securityToken as JwtSecurityToken;
-            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            if (!(securityToken is JwtSecurityToken jwtSecurityToken) || !jwtSecurityToken.Header.Alg.Equals(_securityAlgorithm, StringComparison.InvariantCultureIgnoreCase))
                 throw new SecurityTokenException("Invalid token");
 
             return principal;

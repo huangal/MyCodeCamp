@@ -12,10 +12,11 @@ namespace MyCodeCamp.Services
     public class RsaTokenService : ITokenService
     {
         private readonly ITokenSettings _tokenSettings;
-
+        private readonly string _securityAlgorithm ;
         public RsaTokenService(ITokenSettings tokenSettings)
         {
             _tokenSettings = tokenSettings;
+            _securityAlgorithm = SecurityAlgorithms.RsaSha256;
         }
 
         public string GenerateToken(IEnumerable<Claim> claims, DateTime utcExpiration, object privateKey = null)
@@ -23,7 +24,7 @@ namespace MyCodeCamp.Services
             if (privateKey == null) privateKey = _tokenSettings.RsaPrivateKey;
 
             var securityKey = new RsaSecurityKey((RSA)privateKey);
-            var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha256);
+            var signingCredentials = new SigningCredentials(securityKey, _securityAlgorithm);
 
             return GenerateToken(claims, utcExpiration, signingCredentials);
         }
@@ -63,8 +64,10 @@ namespace MyCodeCamp.Services
 
             var tokenValidationParameters = new TokenValidationParameters
             {
-                ValidateAudience = false, //you might want to validate the audience and issuer depending on your use case
-                ValidateIssuer = false,
+                ValidateAudience = true, //you might want to validate the audience and issuer depending on your use case
+                ValidAudience = _tokenSettings.Audience,
+                ValidateIssuer = true,
+                ValidIssuer = _tokenSettings.Issuer,
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = issuerSigningKey,
                 ValidateLifetime = false //here we are saying that we don't care about the token's expiration date
@@ -73,8 +76,9 @@ namespace MyCodeCamp.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             SecurityToken securityToken;
             ClaimsPrincipal principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
-            var jwtSecurityToken = securityToken as JwtSecurityToken;
-            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.RsaSha256, StringComparison.InvariantCultureIgnoreCase))
+
+            if (!(securityToken is JwtSecurityToken jwtSecurityToken) 
+                || !jwtSecurityToken.Header.Alg.Equals(_securityAlgorithm, StringComparison.InvariantCultureIgnoreCase))
                 throw new SecurityTokenException("Invalid token");
 
             return principal;

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MyCodeCamp.Models;
 
@@ -13,7 +11,6 @@ namespace MyCodeCamp.Controllers
     {
 
         private readonly ITopicAreaService _service;
-      
 
         public TopicsController(ITopicAreaService service)
         {
@@ -84,12 +81,6 @@ namespace MyCodeCamp.Controllers
         }
 
 
-
-
-
-
-
-
         [HttpGet("List")]
         public IActionResult GetTopics()
         {
@@ -115,48 +106,7 @@ namespace MyCodeCamp.Controllers
 
         }
 
-        [HttpGet("Heroes")]
-        public async Task<IActionResult> GetHeroes()
-        {
-            try
-            {
-                var heroes = await _service.GetAllHeroesAsync();
 
-
-                if (heroes != null)
-                {
-                    return Ok(heroes);
-                }
-                return NotFound();
-
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine(ex);
-                return BadRequest(ex);
-            }
-        }
-
-
-        [HttpGet("Heroes/{id}")]
-        public async Task<IActionResult> GetHeroes(int id)
-        {
-            try
-            {
-                var hero = await _service.GetHeroAsync(id);
-
-                if (hero != null)
-                    return Ok(hero);
-                else
-                return NotFound();
-
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine(ex);
-                return BadRequest(ex);
-            }
-        }
 
         //[HttpGet("Heroes")]
         //public IActionResult GetHeroes()

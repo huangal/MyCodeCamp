@@ -1,0 +1,196 @@
+{
+	"info": {
+		"_postman_id": "a454e52f-caf8-4b8c-bfac-98ebccfd0f14",
+		"name": "JWTAuthentication",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetUsers",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjF0ZXN0SGVucnkiLCJzdWIiOiJIdWFuZ2FsIiwianRpIjoiZTMwMzY3MDMtMDk0OS00NDk5LTgzYjEtOTMzMTE0OGQzMDhmIiwiZ2l2ZW5fbmFtZSI6IkhlbnJ5IiwiZmFtaWx5X25hbWUiOiJIdWFuZ2FsIiwiZW1haWwiOiJoZW5yeUBodWFuZ2FsLmNvbSIsInJvbGUiOiJJc0NvbnRyaWJ1dG9yIiwiSXNDb250cmlidXRvciI6InRydWUiLCJJc1JlYWRlciI6InRydWUiLCJJc0FkbWluIjoiZmFsc2UiLCJuYmYiOjE1NDM3NTg4MjksImV4cCI6MTU0Mzc1ODk0OSwiaWF0IjoxNTQzNzU4ODI5LCJpc3MiOiJodHRwczovL3d3dy5odWFuZ2FsLmNvbSIsImF1ZCI6Imh0dHBzOi8vd3d3Lmh1YW5nYWwuY29tIn0.QGM7D4YvZAH6AfN__F0t_rXpStaF6VZ58r-j9CWpAxIGCTZoVH12VTpL197HqqcJrE-PvJqimDTJe3LduLUxGziv6QhnZep4SDNQoCQ3uGBst4dOg4MI4TM-7V-Yi2_QwrllQYJ6Zi84EbEt18JV5iDE5tH5Jl0yyV8gsTtWdExl8JPCBmOw8tUD_fHbqyLrZ29ZjFu14_XTYIx9zy6lGLiog3_-epnILhBEho-bf7IWZwylFG8In1Ajsmm4Jqnsd-FAmNdMCqct5O1G4HICyFt6GxDlKaqGMt7LaJbVZH6PZFfcGFBlC_j73QHhfJw6KFIMQUtLmQZWwEh4fJNf9Q",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/Users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"Users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetTokenInfo",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjF0ZXN0SGVucnkiLCJzdWIiOiJIdWFuZ2FsIiwianRpIjoiZTMwMzY3MDMtMDk0OS00NDk5LTgzYjEtOTMzMTE0OGQzMDhmIiwiZ2l2ZW5fbmFtZSI6IkhlbnJ5IiwiZmFtaWx5X25hbWUiOiJIdWFuZ2FsIiwiZW1haWwiOiJoZW5yeUBodWFuZ2FsLmNvbSIsInJvbGUiOiJJc0NvbnRyaWJ1dG9yIiwiSXNDb250cmlidXRvciI6InRydWUiLCJJc1JlYWRlciI6InRydWUiLCJJc0FkbWluIjoiZmFsc2UiLCJuYmYiOjE1NDM3NTg4MjksImV4cCI6MTU0Mzc1ODk0OSwiaWF0IjoxNTQzNzU4ODI5LCJpc3MiOiJodHRwczovL3d3dy5odWFuZ2FsLmNvbSIsImF1ZCI6Imh0dHBzOi8vd3d3Lmh1YW5nYWwuY29tIn0.QGM7D4YvZAH6AfN__F0t_rXpStaF6VZ58r-j9CWpAxIGCTZoVH12VTpL197HqqcJrE-PvJqimDTJe3LduLUxGziv6QhnZep4SDNQoCQ3uGBst4dOg4MI4TM-7V-Yi2_QwrllQYJ6Zi84EbEt18JV5iDE5tH5Jl0yyV8gsTtWdExl8JPCBmOw8tUD_fHbqyLrZ29ZjFu14_XTYIx9zy6lGLiog3_-epnILhBEho-bf7IWZwylFG8In1Ajsmm4Jqnsd-FAmNdMCqct5O1G4HICyFt6GxDlKaqGMt7LaJbVZH6PZFfcGFBlC_j73QHhfJw6KFIMQUtLmQZWwEh4fJNf9Q\""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/Auth/Token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"Auth",
+						"Token"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjF0ZXN0SGVucnkiLCJzdWIiOiJIdWFuZ2FsIiwianRpIjoiNjIzYjIyZTgtYTEzYS00ZjM1LThiYTMtMjUyNTU3M2FjOTcwIiwiZ2l2ZW5fbmFtZSI6IkhlbnJ5IiwiZmFtaWx5X25hbWUiOiJIdWFuZ2FsIiwiZW1haWwiOiJoZW5yeUBodWFuZ2FsLmNvbSIsInJvbGUiOiJJc0NvbnRyaWJ1dG9yIiwiSXNDb250cmlidXRvciI6InRydWUiLCJJc1JlYWRlciI6InRydWUiLCJJc0FkbWluIjoiZmFsc2UiLCJuYmYiOjE1NDMxMjk4MTIsImV4cCI6MTU0MzEyOTkzMiwiaWF0IjoxNTQzMTI5ODEyLCJpc3MiOiJodHRwczovL3d3dy5odWFuZ2FsLmNvbSIsImF1ZCI6Imh0dHBzOi8vd3d3Lmh1YW5nYWwuY29tIn0.qEq8PqKJcbFxXUb-CYVmczO3Xru6yuRLqrDSYmhuOdc\"",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AuthenticateUser",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"test\",\n  \"password\": \"test\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/Auth/authenticate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"Auth",
+						"authenticate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RefreshToken",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \"token\":\"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjF0ZXN0SGVucnkiLCJzdWIiOiJIdWFuZ2FsIiwianRpIjoiZTMwMzY3MDMtMDk0OS00NDk5LTgzYjEtOTMzMTE0OGQzMDhmIiwiZ2l2ZW5fbmFtZSI6IkhlbnJ5IiwiZmFtaWx5X25hbWUiOiJIdWFuZ2FsIiwiZW1haWwiOiJoZW5yeUBodWFuZ2FsLmNvbSIsInJvbGUiOiJJc0NvbnRyaWJ1dG9yIiwiSXNDb250cmlidXRvciI6InRydWUiLCJJc1JlYWRlciI6InRydWUiLCJJc0FkbWluIjoiZmFsc2UiLCJuYmYiOjE1NDM3NTg4MjksImV4cCI6MTU0Mzc1ODk0OSwiaWF0IjoxNTQzNzU4ODI5LCJpc3MiOiJodHRwczovL3d3dy5odWFuZ2FsLmNvbSIsImF1ZCI6Imh0dHBzOi8vd3d3Lmh1YW5nYWwuY29tIn0.QGM7D4YvZAH6AfN__F0t_rXpStaF6VZ58r-j9CWpAxIGCTZoVH12VTpL197HqqcJrE-PvJqimDTJe3LduLUxGziv6QhnZep4SDNQoCQ3uGBst4dOg4MI4TM-7V-Yi2_QwrllQYJ6Zi84EbEt18JV5iDE5tH5Jl0yyV8gsTtWdExl8JPCBmOw8tUD_fHbqyLrZ29ZjFu14_XTYIx9zy6lGLiog3_-epnILhBEho-bf7IWZwylFG8In1Ajsmm4Jqnsd-FAmNdMCqct5O1G4HICyFt6GxDlKaqGMt7LaJbVZH6PZFfcGFBlC_j73QHhfJw6KFIMQUtLmQZWwEh4fJNf9Q\",\n\t\"refreshToken\":\t\"abcde\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/Auth/Token/Refresh",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"Auth",
+						"Token",
+						"Refresh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetHeroInfo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/Heroes/8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"Heroes",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetHeroes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/Heroes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"Heroes"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

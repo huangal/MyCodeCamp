@@ -34,8 +34,10 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\swagger\ui\custom.css" />
+    <Content Remove="Helpers\JWTAuthentication.postman_collection.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="wwwroot\swagger\ui\custom.css" />
+    <None Include="Helpers\JWTAuthentication.postman_collection.json" />
   </ItemGroup>
 </Project>
